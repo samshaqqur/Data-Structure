@@ -1,0 +1,658 @@
+//
+//  main.cpp
+//  GhostGameFinal
+//
+//  Created by Samuel Shaqqur on 11/1/16.
+//  Copyright © 2016 Samuel Shaqqur. All rights reserved.
+//
+
+#include <iostream>
+#include <fstream> //including the fstream library to read textfile
+#include <string> // including the string library
+using namespace std;
+
+class TrieNode { //creating an array of nodes that has all the alphabet type TireNode
+public:
+    // Initialize your data structure here.
+    TrieNode() {
+        value = 0;
+        for (int i=0;i<26;i++){
+            Alphabet[i] = NULL;
+        }
+    }
+    int value;
+    TrieNode* Alphabet[26];
+};
+
+class Trie { //creating a trie tree class that has two main functions
+private:
+    TrieNode* root; //declaring the root
+    int count; //defining a count variable
+
+public:
+    Trie() {
+        root = new TrieNode();
+        count = 0;
+    }
+    
+    // Inserts a word into the trie.
+    void insert(string tword) {
+        TrieNode *p = root;
+        long int len = tword.size();
+        for (int i=0;i<len;i++){
+            int idx = tword[i] - 'a';
+            if (! p->Alphabet[idx]){
+                p->Alphabet[idx] = new TrieNode();
+            }
+            p = p->Alphabet[idx];
+        }
+        count++;
+        p->value = count;
+    }
+    
+    // Returns true if the word is in the trie.
+    bool search(string key) {
+        TrieNode *p = root;
+        long int len = key.size();
+        for (int i=0;i<len;i++){
+            int idx = key[i] - 'a';
+            if (p->Alphabet[idx]){
+                p = p->Alphabet[idx];
+            }
+            else{
+                return false;
+            }
+        }
+
+        if (p->value!=0 && key.length() >= 5 ){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+};
+
+class GhostGame{
+private:
+    string aLine; //variable that stores the lines(tword) from the textfile
+    ifstream fin;
+    string pl1,pl2,pl3,pl4;
+    string word="";
+    string word1="";
+    string word2="";
+    string word3="";
+    string P1,P2,P3,P4;
+    int Chekexist;
+    Trie T;
+public:
+
+    void InsertWords(){ //this function initializes the trie tree with the textfile words
+        fin.open("englishWords.txt");
+        
+        while (!fin.eof()) { // read whole file
+            getline(fin,aLine);
+            T.insert(aLine);//inserts words to tree
+        }
+        fin.close();
+    }
+    bool checkEx(string Wordchek){//validation of the letters if leads to a word
+        int lettercheck=0;
+        fin.open("englishWords.txt");
+        long int WordSize=Wordchek.length();
+        while (!fin.eof()) { // read whole file
+            getline(fin,aLine);
+
+            for (int i = 0; i < WordSize; i++){
+                if(aLine[i]==Wordchek[i]){
+                    lettercheck++; //if exists add counter 1
+                }
+            }
+            if(lettercheck==WordSize){
+                Chekexist=1;//if the counter equalls the word size then it exists
+                break;
+            }
+            else{
+                Chekexist=0;
+            }
+        }
+        fin.close();
+        if(Chekexist==1){
+            return true; //if found return true
+        }
+        else{
+            return false;
+        }
+    }
+
+
+
+    void fourp(){
+        int cp1=1;//keeps track if winner
+        int cp2=1;//keeps track if winner
+        int cp3=1;//keeps track if winner
+        int cp4=1;//keeps track if winner
+        bool chek=false;
+        InsertWords();//Inserts words to trie tree
+        cout<<""<<endl;
+        cout<< "Please insert 1st player NAME"<<endl;
+        cin>>pl1;
+        cout<<""<<endl;
+        cout<< "Please insert 2st player NAME"<<endl;
+        cin>>pl2;
+        cout<<""<<endl;
+        cout<< "Please insert 3rd player NAME"<<endl;
+        cin>>pl3;
+        cout<<""<<endl;
+        cout<< "Please insert 4th player NAME"<<endl;
+        cin>>pl4;
+        while(chek==false){
+            if(cp1==1){
+            cout<<""<<endl;
+            cout<<"Word Spelled : " <<word1<<endl;
+            cout<< pl1 <<" Insert a letter"<<endl;
+            cin>> P1;
+            while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+            {
+                cout<<pl1 <<" Please enter only one character"<<endl;
+                cin>> P1;
+            }
+            word1+=P1;//adds one letter to the word
+            if(T.search(word1)==1){
+                cout<< pl1<<" Losses by spelling the word "<< "'" << word1 << "'"<<endl;
+                cp1=0;
+                break;
+            }
+            }
+            if(cp2==1){
+            cout<<""<<endl;
+            cout<<"Word Spelled : " <<word1<<endl;
+            cout<< pl2 << " Insert a letter"<<endl;
+            cin>>P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+            word1+=P2;//adds one letter to the word
+            if(T.search(word1)==1){
+                cout<< pl2 <<" Losses by spelling the word " << "'"<< word1 << "'"<<endl;
+                cp2=0;
+                break;
+            }
+            }
+            if(cp3==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word1<<endl;
+            cout<< pl3 <<" Insert a letter"<<endl;
+            cin>> P3;
+                while(P3.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl3 <<" Please enter only one character"<<endl;
+                    cin>> P3;
+                }
+            word1+=P3;//adds one letter to the word
+            if(T.search(word1)==1){
+                cout<< pl3<< " Losses by spelling the word "<< "'" << word1 << "'"<<endl;
+                cp3=0;
+                break;
+            }
+            }
+            if(cp4==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word1<<endl;
+            cout<< pl4 <<" Insert a letter"<<endl;
+            cin>> P4;
+                while(P4.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl4 <<" Please enter only one character"<<endl;
+                    cin>> P4;
+                }
+            word1+=P4;//adds one letter to the word
+            if(T.search(word1)==1){
+                cout<< pl4<< " Losses by spelling the word "<< "'" << word1 << "'"<<endl;
+                cp4=0;
+                break;
+            }
+            }
+
+        }
+        while(chek==false){
+            if(cp1==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl1 <<" Insert a letter"<<endl;
+                cin>> P1;
+                while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl1 <<" Please enter only one character"<<endl;
+                    cin>> P1;
+                }
+                word2+=P1;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl1<<" Losses by spelling the word "<< "'" << word2 << "'"<<endl;
+                    cp1=0;
+                    break;
+                }
+            }
+            if(cp2==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl2 << " Insert a letter"<<endl;
+                cin>>P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+                word2+=P2;
+                if(T.search(word2)==1){
+                    cout<< pl2 <<" Losses by spelling the word " << "'"<< word2 << "'"<<endl;
+                    cp2=0;
+                    break;
+                }
+            }
+            if(cp3==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl3 <<" Insert a letter"<<endl;
+                cin>> P3;
+                while(P3.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl3 <<" Please enter only one character"<<endl;
+                    cin>> P3;
+                }
+                word2+=P3;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl3<< " Losses by spelling the word "<< "'" << word2 << "'"<<endl;
+                    cp3=0;
+                    break;
+                }
+            }
+            if(cp4==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl4 <<" Insert a letter"<<endl;
+                cin>> P4;
+                while(P4.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl4 <<" Please enter only one character"<<endl;
+                    cin>> P4;
+                }
+                word2+=P4;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl4<< " Losses by spelling the word "<< "'" << word2 << "'"<<endl;
+                    cp4=0;
+                    break;
+                }
+            }
+        }
+        while(chek==false){
+            if(cp1==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word3<<endl;
+                cout<< pl1 <<" Insert a letter"<<endl;
+                cin>> P1;
+                while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl1 <<" Please enter only one character"<<endl;
+                    cin>> P1;
+                }
+                word3+=P1;//adds one letter to the word
+                if(T.search(word3)==1){
+                    cout<< pl1<<" Losses by spelling the word "<< "'" << word3 << "'...";
+                    cp1=0;
+                    break;
+                }
+            }
+            if(cp2==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word3<<endl;
+                cout<< pl2 << " Insert a letter"<<endl;
+                cin>>P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+                word3+=P2;//adds one letter to the word
+                if(T.search(word3)==1){
+                    cout<< pl2 <<" Losses by spelling the word " << "'"<< word3 << "'...";
+                    cp2=0;
+                    break;
+                }
+            }
+            if(cp3==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word3<<endl;
+                cout<< pl3 <<" Insert a letter"<<endl;
+                cin>> P3;
+                while(P3.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl3 <<" Please enter only one character"<<endl;
+                    cin>> P3;
+                }
+                word3+=P3;//adds one letter to the word
+                if(T.search(word3)==1){
+                    cout<< pl3<< " Losses by spelling the word "<< "'" << word3 << "'...";
+                    cp3=0;
+                    break;
+                }
+            }
+            if(cp4==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word3<<endl;
+                cout<< pl4 <<" Insert a letter"<<endl;
+                cin>> P4;
+                while(P4.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl4 <<" Please enter only one character"<<endl;
+                    cin>> P4;
+                }
+                word3+=P4;//adds one letter to the word
+                if(T.search(word3)==1){
+                    cout<< pl4<< " Losses by spelling the word "<< "'" << word3 << "'...";
+                    cp4=0;
+                    break;
+                }
+            }
+        }
+        if(cp1==1){
+            cout<<pl1 << " Wins!!"<<endl;
+        }
+        if(cp2==1){
+            cout<<pl2 << " Wins!!"<<endl;
+        }
+        if(cp3==1){
+            cout<<pl3 << " Wins!!"<<endl;
+        }
+        if(cp4==1){
+            cout<<pl4 << " Wins!!"<<endl;
+        }
+
+    }
+    void threep(){
+        int cp1=1;//keeps track if winner
+        int cp2=1;//keeps track if winner
+        int cp3=1;//keeps track if winner
+        bool chek=false;
+        InsertWords(); //Inserts words to trie tree
+        cout<<""<<endl;
+        cout<< "Please insert 1st player NAME"<<endl;
+        cin>>pl1;
+        cout<<""<<endl;
+        cout<< "Please insert 2nd player NAME"<<endl;
+        cin>>pl2;
+        cout<<""<<endl;
+        cout<< "Please insert 3rd player NAME"<<endl;
+        cin>>pl3;
+        while(chek==false){
+            if(cp1==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word1<<endl;
+                cout<< pl1 <<" Insert a letter"<<endl;
+                cin>> P1;
+                while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl1 <<" Please enter only one character"<<endl;
+                    cin>> P1;
+                }
+                word1+=P1;//adds one letter to the word
+                if(T.search(word1)==1){
+                    cout<< pl1<<" Losses by spelling the word "<< "'" << word1 << "'"<<endl;
+                    cp1=0;
+                    break;
+                }
+            }
+            if(cp2==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word1<<endl;
+                cout<< pl2 << " Insert a letter"<<endl;
+                cin>>P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+                word1+=P2;//adds one letter to the word
+                if(T.search(word1)==1){
+                    cout<< pl2 <<" Losses by spelling the word " << "'"<< word1 << "'"<<endl;
+                    cp2=0;
+                    break;
+                }
+            }
+            if(cp3==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word1<<endl;
+                cout<< pl3 <<" Insert a letter"<<endl;
+                cin>> P3;
+                while(P3.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl3 <<" Please enter only one character"<<endl;
+                    cin>> P3;
+                }
+                word1+=P3;//adds one letter to the word
+                if(T.search(word1)==1){
+                    cout<< pl3<< " Losses by spelling the word "<< "'" << word1 << "'"<<endl;
+                    cp3=0;
+                    break;
+                }
+            }
+        }
+        while(chek==false){
+            if(cp1==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl1 <<" Insert a letter"<<endl;
+                cin>> P1;
+                while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl1 <<" Please enter only one character"<<endl;
+                    cin>> P1;
+                }
+                word2+=P1;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl1<<" Losses by spelling the word "<< "'" << word2 << "'...";
+                    cp1=0;
+                    break;
+                }
+            }
+            if(cp2==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl2 << " Insert a letter"<<endl;
+                cin>>P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+                word2+=P2;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl2 <<" Losses by spelling the word " << "'"<< word2 << "'...";
+                    cp2=0;
+                    break;
+                }
+            }
+            if(cp3==1){
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word2<<endl;
+                cout<< pl3 <<" Insert a letter"<<endl;
+                cin>> P3;
+                while(P3.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl3 <<" Please enter only one character"<<endl;
+                    cin>> P3;
+                }
+                word2+=P3;//adds one letter to the word
+                if(T.search(word2)==1){
+                    cout<< pl3<< " Losses by spelling the word "<< "'" << word2 << "'...";
+                    cp3=0;
+                    break;
+                }
+            }
+
+        }
+
+        if(cp1==1){
+            cout<<pl1 << " Wins!!"<<endl;
+        }
+        if(cp2==1){
+            cout<<pl2 << " Wins!!"<<endl;
+        }
+        if(cp3==1){
+            cout<<pl3 << " Wins!!"<<endl;
+        }
+    }
+
+
+    void twop(){
+        int score1=100; //keeps track of score if enters incorrect letter that doesn't lead to word
+        int score2=100; //keeps track of score if enters incorrect letter that doesn't lead to word
+        InsertWords(); //initializes the trie tree with words from text file
+        cout<<""<<endl;
+        cout<< "Please insert 1st player NAME"<<endl;
+        cin>>pl1;
+        cout<<""<<endl;
+        cout<< "Please insert 2nd player NAME"<<endl;
+        cin>>pl2;
+        while(T.search(word)==0){ // as long as the word is not found
+            cout<<""<<endl;
+            cout<<"Word Spelled : " <<word<<endl;
+            cout<<pl1<<" Score= "<<score1<<" "<<endl;
+            cout<< pl1 <<" Insert a letter"<<endl;
+            cin>> P1;
+            while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+            {
+                cout<<pl1 <<" Please enter only one character"<<endl;
+                cin>> P1;
+            }
+            word+=P1;//adds one letter to the word
+            while(checkEx(word)==false){//check if lead to a real word
+                score1=score1-5; //if incorrect takes 5 of the total score
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word<<endl;
+                cout<<pl1<<" Score= "<<score1<<" "<<endl;
+                cout<< "Doesn't lead to a word, Please try again "<< pl1<<endl;
+                string st = word.substr(0, word.size()-1); //deletes last letter of the word
+                word=st;
+                cout<< pl1 <<" Insert a letter"<<endl;
+                cin>> P1;
+                while(P1.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl1 <<" Please enter only one character"<<endl;
+                    cin>> P1;
+                }
+                word+=P1; //adds one letter to the word
+                
+            }
+            if(T.search(word)==1){
+                cout<< pl2<<" Wins! "<< pl1 << " Losses by spelling "<< "'" << word << "'"<<endl;
+                break;
+            }
+            cout<<""<<endl;
+            cout<< "Word Spelled : " << word<<endl;
+            cout<<pl2<<" Score= "<<score2<<" "<<endl; //prints out the score
+            cout<< pl2 << " Insert a letter"<<endl;
+            cin>>P2;
+            while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+            {
+                cout<<pl2 <<" Please enter only one character"<<endl;
+                cin>> P2;
+            }
+            word+=P2;//adds one letter to the word
+            while(checkEx(word)==false){//check if lead to a real word
+                score2=score2-5; //if incorrect takes 5 of the total score
+                cout<<""<<endl;
+                cout<<"Word Spelled : " <<word<<endl;
+                cout<<pl2<<" Score= "<<score2<<" "<<endl; //prints out the score
+                cout<< "Doesn't lead to a word, Please try again "<< pl2<<endl;
+                string st = word.substr(0, word.size()-1); //deletes last letter of the word
+                word=st;
+                cout<< pl2 <<" Insert a letter"<<endl;
+                cin>> P2;
+                while(P2.length() > 1)// if the player typed in more than one letter, it's an error.
+                {
+                    cout<<pl2 <<" Please enter only one character"<<endl;
+                    cin>> P2;
+                }
+                word+=P2;//adds one letter to the word
+
+            }
+            if(T.search(word)==1){
+                cout<< pl1<< " Wins! "<<pl2<<" Losses by spelling the word " << "'"<< word << "'"<<endl;
+                break;
+            }
+        }
+    }
+
+        void StartGame(){ //depending on choice goes to function of how many players
+            int pchoice;
+            string ch;
+            cout<<""<<endl;
+            cout<< "Please enter the number of players from 2-4" <<endl;
+            cin>>pchoice;
+            if(pchoice==2){
+                word="";
+                twop();
+            }
+            if(pchoice==3){
+                word1="";
+                word2="";
+                threep();
+            }
+            if(pchoice==4){
+                word1="";
+                word2="";
+                word3="";
+                fourp();
+            }
+
+        }
+
+
+
+     void Game(){
+            int choice; //variable stores choice to play or to quit
+            bool flag=true;
+            cout<< "1. Start Game" <<endl;
+            cout<< "2. Exit Game" <<endl;
+            cout<< "Please select option:" <<endl;
+            cin>>choice;
+            while(flag==true){
+                if(choice==1){
+                    StartGame();
+                }
+                if(choice==2){
+                    flag=false;
+                    break;
+                }
+                cout<<""<<endl;
+                cout<< "1. Start Game" <<endl;
+                cout<< "2. Exit Game" <<endl;
+                cout<< "Please select an option:" <<endl;
+                cin>>choice;
+            }
+        }
+
+};
+
+
+// Driver
+int main()
+{
+    GhostGame G1;
+    G1.Game();
+
+
+    return 0;
+}
+
+
+
+
+
+
+
+
