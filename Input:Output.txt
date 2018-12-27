@@ -1,0 +1,71 @@
+//
+//  main.cpp
+//  Week11SamualShaqqurProg4
+//
+//  Created by Samuel Shaqqur on 10/30/16.
+//  Copyright © 2016 Samuel Shaqqur. All rights reserved.
+//
+
+#include <fstream>
+#include <string>
+#include <iostream>
+using namespace std;
+int main() {
+    
+    int score;    	// stores the number of times the user will input first name
+    const int numOfTest=10;
+    int arrayTestScores[10];
+    
+    ofstream fout;
+    fout.open("savedTestScores.txt");
+    
+    for (int i=0; i<numOfTest; i++) {
+        
+        cout<<"Please write the "<<i+1<<" test score (0-100): ";
+        cin>>score;
+        while (score<0 || score>100) {
+            cout<<"Invalid entry, please write the "<<i+1<<" test score (0-100): ";
+            cin>>score;
+        }
+        
+        cout<<endl;
+        fout<<score<<endl;
+        arrayTestScores[i]=score;
+    }
+    
+    cout<<"All 10 scores have been stored, please check the file to make sure"<<endl;
+    
+    fout.close();
+    
+    //--------- Below is the program for figuring out the min, max and average score-------//
+    
+    
+    int min, max, average;
+    int sum = 0;
+    
+    max=arrayTestScores[0];
+    for (int i=1; i<numOfTest; i++) {
+        if (arrayTestScores[i]>max) {
+            max=arrayTestScores[i];
+        }
+    }
+    min=arrayTestScores[0];
+    for (int i=1; i<numOfTest; i++) {
+        if (arrayTestScores[i]<min) {
+            min=arrayTestScores[i];
+        }
+    }
+    
+    for (int i=0; i<numOfTest; i++) {
+        sum=sum+arrayTestScores[i];
+    }
+    
+    average=sum/numOfTest;
+    
+    cout<< "The max number is: "<<max<<endl;
+    
+    cout<< "The min number is: "<<min<<endl;
+    
+    cout<< "The average number is: "<<average<<endl;
+    return 0;
+}
