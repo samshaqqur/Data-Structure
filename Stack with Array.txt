@@ -1,0 +1,46 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+string SArray[101]; //declaring aray size 101
+int top = -1; 
+
+void push(string x) { // adds value to the top of the stack
+	if (top == 100) {
+		cout << "Stack overflow";
+		return;
+	}
+	SArray[++top] = x;
+}
+void pop() { // removes the first value of stack
+	if (top == -1) {
+		cout << "No Element";
+		return;
+	}
+	top--;
+}
+string Top() { //return fist value in the stack
+	return SArray[top];
+}
+void Print() { // prints all the values in the stack
+	cout << "Stack: ";
+	for (int i = 0; i <= top; i++) {
+		cout << " " << SArray[i];
+	}
+	cout << " " << endl;
+}
+
+int main()
+{
+	push("First:Sam"); // adding value to top
+	Print();// Printing values in stack
+	push("Last:Shaq");// adding value to top
+	Print(); // Printing values in stack
+	push("Number:605-524-5514");// adding value to top
+	Print();// Printing values in stack
+    return 0;
+}
+
+
+
