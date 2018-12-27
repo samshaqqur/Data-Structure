@@ -1,0 +1,296 @@
+// Week9SamualShaqqurProg1.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define Max_Size 10
+using namespace std;
+
+
+
+//node
+class node {
+public:
+	string name;
+	int priority;
+	//'none'
+	// 0
+	node() {
+		name = "none";
+		priority = 0;
+	}
+
+};
+
+
+class UnSortedListPQ {
+private:
+	//string element fixed size of 12
+	node element[Max_Size];
+	string name;
+
+	//keeping track of front, back and size of array with integer
+	int xfront, xrear, count, arraySize, indexDeleted, Num;
+public:
+	//default constructor
+	UnSortedListPQ()
+	{
+		//max array size
+		arraySize = Max_Size;
+
+		xrear = xfront = -1; // keep track of front so we know any
+							 //default of name = "none"
+		name = "none";
+		//default of num = 0
+		Num = 0;
+	}
+	//add object of node in the priority queue
+	void enqueue(node xElement)
+	{
+		// if xrear is 9%10= 1 == 1
+		if (isFull()) {
+			return;
+		}
+		//if is empty then
+		if (isEmpty()) {
+			//set xfront to zero
+			xfront = 0;
+
+		}
+		//set rear to remainder of ((rear+1)/12)
+		xrear = (xrear + 1) % Max_Size;
+
+		//setting element index xrear to elements equal to the insert node value
+		element[xrear].name = xElement.name;
+		element[xrear].priority = xElement.priority;
+
+		//print out the node element added
+		cout << "element added to the queue: " << element[xrear].name << "\n";
+		//increment the count by one
+		count++;
+	}
+
+
+	//how to delete and element from the end of the front the PQ
+	void dequeue()
+	{
+
+		// if head = -1 then add one to head and add inserted elemnt
+		if (isEmpty()) {
+			cout << "Array under flow \n";
+			return;
+		}
+		//print out what we are dequeueing from the front of the list
+		cout << "Dequeued: " << element[xfront].name << " Priority:" << element[xfront].priority << "\n";
+		//element of front is getting deleted by setting to none
+		element[xfront].name = "none";
+		//element of front is getting deleted by setting to 0
+		element[xfront].priority = Num;
+
+		//if front equal back
+		if (xfront == xrear) {
+			//rear and front = -1
+			xrear = xfront = -1;
+		}
+		else {
+			//if not front = (front +1) / N
+			xfront = (xfront + 1) % arraySize;
+			//decrement count by one
+			count--;
+		}
+
+	}
+
+
+
+
+	void quickSort(node *a, int first, int last)
+	{
+		node pivotElement;
+		if (first < last)
+		{
+			pivotElement.priority = shift(a, first, last);
+
+			quickSort(a, first, pivotElement.priority - 1);
+			quickSort(a, pivotElement.priority + 1, last);
+		}
+	}
+
+
+
+	int shift(node a[], int first, int last)
+	{
+		int p = first;
+		int pivotElement = a[first].priority;
+		for (int i = first + 1; i <= last; i++)
+		{
+			/* If you want to sort the list in the other order, change "<=" to ">" */
+			if (a[i].priority <= pivotElement)
+			{
+				p++;
+				swap(a[i], a[p]);
+			}
+		}
+		swap(a[p], a[first]);
+		return p;
+
+	}
+
+
+	//swaping objects of nodes used for other functions
+	void swap(node& a, node& b)
+	{
+		node temp = a;
+		a = b;
+		b = temp;
+	}
+
+	bool isFull()
+	{
+		//if xrear == 11
+		if ((xrear + 1) % arraySize == xfront) {
+			//then return true
+			cout << "Array overflow!\n";
+			return true;
+		}
+		//else return false
+		return false;
+	}
+
+	bool isEmpty()
+	{
+		//if front and rear are at -1
+		if (xfront == -1) {
+			return true;
+
+		}
+		//else return false
+		else {
+			return false;
+		}
+
+	}
+	//return the size of elements in the array array
+	int size()
+	{
+		if (isEmpty()) {
+			cout << "Array is empty!";
+		}
+		return count;
+
+	}
+	//print values in node struture
+	void print() {
+
+		int length = count;
+
+		for (int x = 0; x< length; x++) {
+			cout << "array[" << element[x].priority << "] = " << element[x].name << endl;
+		}
+
+
+	}
+
+
+
+
+};
+
+
+
+int main()
+{
+
+	//functionally instance of class
+	UnSortedListPQ PQ;
+	//test array
+	node Trial[15];
+
+	string xname[15] = { "Joe","Fred","Tuyet","Jose","Jing","Xi","Moe","Miko","Vlady","Frank","Anny","Xi","Wali","xChe","xVerra" };
+
+	int prio[15] = { 3,1,9,6,2,5,3,7,8,9,3,2,2,6,8 };
+
+
+	int lenth = sizeof(prio) / 4;
+
+	//setting them equal to the trial
+	for (int x = 0; x<lenth; x++) {
+
+		Trial[x].priority = prio[x];
+		Trial[x].name = xname[x];
+
+	}
+
+	//joe
+	PQ.enqueue(Trial[0]);
+	//fred
+	PQ.enqueue(Trial[1]);
+	//tuyet
+	PQ.enqueue(Trial[2]);
+
+	//delete joe
+	PQ.dequeue();
+
+	//jose
+	PQ.enqueue(Trial[3]);
+	//jing
+	PQ.enqueue(Trial[4]);
+	//xi
+	PQ.enqueue(Trial[5]);
+	//moe
+	PQ.enqueue(Trial[6]);
+
+	//delete fred
+	PQ.dequeue();
+
+	//miko
+	PQ.enqueue(Trial[7]);
+	//vladdy
+	PQ.enqueue(Trial[8]);
+	//frank
+	PQ.enqueue(Trial[9]);
+	//anny
+	PQ.enqueue(Trial[10]);
+
+	//detelet tuyet
+	PQ.dequeue();
+
+	//xi
+	PQ.enqueue(Trial[11]);
+	//wali
+	PQ.enqueue(Trial[12]);
+	//xChe
+	PQ.enqueue(Trial[13]);
+	//xverra
+	PQ.enqueue(Trial[14]);
+
+	//jose
+	PQ.dequeue();
+	//jing
+	PQ.dequeue();
+	//xi
+	PQ.dequeue();
+	//moe
+	PQ.dequeue();
+	//miko
+	PQ.dequeue();
+	//vlady
+	PQ.dequeue();
+	//frank
+	PQ.dequeue();
+	//anny
+	PQ.dequeue();
+	//xi
+	PQ.dequeue();
+	//xvera
+	PQ.dequeue();
+
+	PQ.dequeue();
+
+}
+
+
+
+
+
