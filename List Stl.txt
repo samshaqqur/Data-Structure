@@ -1,0 +1,32 @@
+#include "stdafx.h"
+#include <iostream> 
+#include <algorithm>
+#include <list> //include list library
+using namespace std;
+
+
+int main() {
+	cout << "Hello world!" << endl;
+
+	list<int>  mylist = { 42, 17 }; // declaring an array size 2
+	mylist.remove(17); // removing number 17 from list
+	for (auto v : mylist){  // prints the list
+		cout << v << "\n";
+	}
+
+	for (auto v : mylist) {// prints the list
+		cout << v << "\n";
+		if (mylist._Getpfirst()) {
+			cout <<"42 Found" << endl;
+			cout << "17 Not Found" << endl;
+		}
+	}
+	for (auto v : mylist) // prints the list
+		cout << v << "\n";
+	}
+	return 0;
+}
+
+
+
+
