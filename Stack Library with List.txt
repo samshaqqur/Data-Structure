@@ -1,0 +1,156 @@
+#include "stdafx.h"
+#include <iostream>
+#include <stack>
+#include <string>
+using namespace std;
+
+class NODE {
+public:
+	string data;  // data 
+	NODE * ptrNext;   // next node in linked list
+	NODE() { ptrNext = NULL; }
+};
+
+class LIST {   // ADT Unsorted LIST
+public:
+	NODE * ptrHead;   // Start of linked list
+	void add(string inData);
+	bool remove(string inData);
+	bool isEmpty();
+	void Reverse(stack<string> s1, stack<string> s2, LIST L);
+	int count();
+	bool search(string inData);
+	void printAll();
+	LIST() { ptrHead = NULL; nodeCount = 0; }
+private:
+	int nodeCount;
+};
+
+void LIST::add(string inData) {  // Insert at beginning - Unsorted list - Fastest insert
+	if (ptrHead == NULL) {  // add first data to list
+		ptrHead = new NODE;
+		ptrHead->data = inData;
+		ptrHead->ptrNext = NULL;
+	}
+	else   // add at beginning - already data in list
+	{
+		NODE * ptrNewNode = new NODE;
+		ptrNewNode->ptrNext = ptrHead;
+		ptrNewNode->data = inData;
+		ptrHead = ptrNewNode;
+	}
+	nodeCount++;
+}
+
+bool LIST::remove(string inData) {
+	if (ptrHead == NULL) {   // no nodes ... nothing to do
+		return false;
+	}
+	else if (nodeCount == 1)  // check only one node
+	{
+		NODE * ptrDel = ptrHead;
+		if (ptrHead->data == inData) {
+			delete ptrDel;
+			ptrHead = NULL;
+			nodeCount = 0;
+			return true;
+		}
+		else { return false; }
+	}
+	else    // multiple nodes
+	{
+		NODE * ptrCurrent = ptrHead;  // start at beginning
+		NODE * ptrPrevious = NULL;
+		while (ptrCurrent->ptrNext != NULL)  // advance to next node... ?
+		{
+			ptrPrevious = ptrCurrent;  // save current as previous
+			ptrCurrent = ptrCurrent->ptrNext; // advance to next node
+
+			if (ptrCurrent->data == inData) {
+				ptrPrevious->ptrNext = ptrCurrent->ptrNext;  // bypass node
+				delete ptrCurrent;  // delete bypadded node
+				nodeCount--;
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+bool LIST::isEmpty() {
+	if (ptrHead == NULL) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+int LIST::count() { return nodeCount; }
+
+bool LIST::search(string inData) {
+	NODE * ptrCurrent = ptrHead;  // start at the beginning
+	while (ptrCurrent != NULL) {
+		if (ptrCurrent->data == inData) {
+			return true;
+		}
+		else {
+			ptrCurrent = ptrCurrent->ptrNext; // advacne to next node
+		}
+	}
+	return false;
+}
+
+void LIST::printAll() {
+	NODE * ptrCurrent = ptrHead;  // start at the beginning
+	while (ptrCurrent != NULL) {
+		cout << ptrCurrent->data << endl;
+		ptrCurrent = ptrCurrent->ptrNext; // advacne to next node
+	}
+}
+void LIST::Reverse(stack<string> s1, stack<string> s2,LIST L) {
+	NODE * ptrCurrent = ptrHead;  // start at the beginning
+	while (ptrCurrent != NULL) {
+		s1.push(ptrCurrent->data); // fill value of list in top of stack
+		ptrCurrent = ptrCurrent->ptrNext; // advacne to next node
+	}
+	while (!s1.empty()) { //while stack not empty fill the other stack so we get reversed values
+		string name;
+		name = s1.top();
+		s2.push(name);
+		s1.pop();
+	}
+	cout << "List of Names Reversed: " << endl;
+	while (!s2.empty()) {
+		cout << s2.top()<< endl; // when printed we get the list names reversed
+		s2.pop();
+	}
+}
+
+
+int main()
+{
+	stack<string> S1;
+	stack<string> S2;
+	LIST L1;
+	L1.add("Jack");
+	L1.add("James");
+	L1.add("Mathew");
+	L1.add("Shawn");
+	L1.add("Chris");
+	L1.add("Jacob");
+	L1.add("Daniel");
+	L1.add("Tom");
+	L1.add("DJ");
+	L1.add("Caleb");
+
+	L1.Reverse(S1,S2, L1);
+
+    return 0;
+}
+
+
+
+
+
