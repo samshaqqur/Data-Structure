@@ -1,0 +1,103 @@
+#include <stdafx.h>
+#include <iostream> 
+using namespace std; 
+
+class LISTofIntVars {
+
+private:            
+	int Array1[10]; //Decalre an array with size 10
+	int count;  // declare a count int
+public:     
+
+	void fillArray() { //constructor that fills array with -1 values
+		count = 0;
+		for (int i = 0; i <= 9; i++) {
+			Array1[i] = -1;
+		}
+	}
+
+	bool isFull() { // checks if array is full
+		if (count == 10) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	// called individually and also by the add method 
+
+	bool add1(int inVar) { // adds the taken value into the array
+		if (!isFull()) {
+			count++;  // add 1 count        
+			for (int i = 0; i <= 9; i++) {
+				if (Array1[i] == -1) {
+					Array1[i] = inVar;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+
+			bool isEmpty() { // checks if empty
+				if (count == 0) {return true;}
+				else {
+					return false;
+				}
+			}	// called individually and also by the add method     
+
+			bool found(int inVal) {	 // called individually and also by the delete method   
+				if (!isEmpty()) {
+					for (int i = 0; i <= 9; i++) {
+						if (Array1[i] == inVal) {
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+				}
+			}
+
+			bool delete1(int inVal) { // delete the value enterd
+				for (int i = 0; i <= 9; i++) {
+					if (Array1[i] == inVal) {
+						Array1[i] = -1;
+						return true;
+					}
+					else { return false; }
+				}
+			}
+
+			void listAll() { // prints all values in array
+				for (int i = 0; i <= 9; i++) {
+					if (Array1[i] != -1) {
+						cout << Array1[i] << endl;
+					}
+				}
+			}  // others 
+}; 
+
+int main() {
+	cout << "Hello world!" << endl; // Test all access methods…      
+	LISTofIntVars AR1;// decalre an instance of the class
+	AR1.fillArray(); // using the class
+	AR1.add1(42); // adding value
+	AR1.add1(17); // adding value
+	AR1.listAll(); //prints all valuesin array
+	AR1.delete1(17);// deleting value
+	AR1.listAll();
+	if (AR1.found(17)) {cout << "17 found" << endl;}
+	else {cout << "17 not found" << endl;} 
+	if (AR1.found(42)) {cout << "42 found" << endl; }
+	else {cout << "14 not found" << endl;}
+	//L1.makeEmpty(); //makeEmpty function is Not yet coded      
+	AR1.listAll(); //prints all valuesin array
+	return 0;
+}
+
+
