@@ -1,0 +1,269 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define Max_Size 10
+using namespace std;
+
+//node class
+class node {
+public:
+	//two variables to save info for name and prio
+	string name;
+	int priority;
+	///default constructor
+	node() {
+		//default name for struct node = "none"
+		name = "none";
+		//default priroity for struct node = 0
+		priority = 0;
+	}
+};
+
+//sorted list Priority queue
+class SortedListPQ {
+private:
+	//node element fixed size of 10
+	node element[Max_Size];
+	//made default name when dequeued
+	string name;
+
+	//keeping track of count, max array size and num reset for prio
+	int count, arraySize, Num;
+public:
+	//default constructor
+	SortedListPQ()
+	{
+		//max array size
+		arraySize = Max_Size;
+
+		count = 0;
+		//default  name
+		name = "none";
+		//default num
+		Num = 0;
+	}
+	//add variable which has node class
+	void enqueue(node xElement)
+	{
+		// count is = arraysize then full
+		if (isFull()) {
+			return;
+		}
+		//add one to count
+		count++;
+
+		//setting element of last added to elements of node element
+		element[count - 1].name = xElement.name; // name element added
+		element[count - 1].priority = xElement.priority; //priority added
+
+														 //just showing that they are added with name and priority
+		cout << "Element added to the queue: " << element[count - 1].name << ", Priority: " << element[count - 1].priority << "\n";
+		//after added quick sort the data so in right order
+		quickSort(element, 0, count - 1);
+
+	}
+	//deleting an element out of the front
+	void dequeue()
+	{
+		// if count == 0
+		if (isEmpty()) {
+			cout << "Array under flow \n";
+			return;
+		}
+
+		cout << "Dequeued: " << element[0].name << " Priority:" << element[0].priority << "\n";
+		element[0].name = "none";
+		element[0].priority = Num;
+		//quicksort so everthing in the list is in order
+		quickSort(element, 0, count - 1);
+		//if not front = (front +1) / N
+
+		//subtract from count 1
+		count--;
+
+	}
+	void quickSort(node *a, int first, int last)
+	{
+		node pivotElement;
+		if (first < last)
+		{
+			pivotElement.priority = shift(a, first, last);
+
+			quickSort(a, first, pivotElement.priority - 1);
+			quickSort(a, pivotElement.priority + 1, last);
+		}
+	}
+	/**
+	* Find and return the index of pivot element.
+	* @param a - The array.
+	* @param first - The start of the sequence.
+	* @param last - The end of the sequence.
+	* @return - the pivot element
+	*/
+	int shift(node a[], int first, int last)
+	{
+		int p = first;
+		int pivotElement = a[first].priority;
+		for (int i = first + 1; i <= last; i++)
+		{
+			/* If you want to sort the list in the other order, change "<=" to ">" */
+			if (a[i].priority> pivotElement)
+			{
+				p++;
+				swap(a[i], a[p]);
+			}
+			if (a[i].priority == pivotElement) {
+				p++;
+			}
+		}
+
+		swap(a[p], a[first]);
+		return p;
+
+	}
+
+	//swap to nodes
+	void swap(node& a, node& b)
+	{
+		node temp = a;
+		a = b;
+		b = temp;
+	}
+
+	bool isFull()
+	{
+		//if xrear == 11
+		if (count == arraySize) {
+			//then return true
+			cout << "Array overflow!\n";
+			return true;
+		}
+		//else return false
+		return false;
+	}
+
+	bool isEmpty()
+	{
+		//if front and rear are at -1
+		if (count == 0) {
+			return true;
+
+		}
+		//else return false
+		else {
+			return false;
+		}
+
+	}
+	//return the size of elements in the array array
+	int size()
+	{
+		if (isEmpty()) {
+			cout << "Array is empty!";
+		}
+		return count;
+
+	}
+	//print whole node struture
+	void print() {
+
+		int length = count;
+
+		for (int x = 0; x< length; x++) {
+			cout << "array[" << element[x].priority << "] = " << element[x].name << endl;
+		}
+
+
+	}
+};
+
+int main()
+{
+
+	//functionally instance of class
+	SortedListPQ PQ;
+	//test array
+	node Trial[15];
+	string xname[15] = { "Joe","Fred","Tuyet","Jose","Jing","Xi","Moe","Miko","Vlady","Frank","Anny","Xi","Wali","xChe","xVerra" };
+
+	int prio[15] = { 3,1,9,6,2,5,3,7,8,9,3,2,2,6,8 };
+
+
+	int lenth = sizeof(prio) / 4;
+
+	//setting them equal to the trial
+	for (int x = 0; x<lenth; x++) {
+
+		Trial[x].priority = prio[x];
+		Trial[x].name = xname[x];
+
+	}
+
+	//joe
+	PQ.enqueue(Trial[0]);
+	//fred
+	PQ.enqueue(Trial[1]);
+	//tuyet
+	PQ.enqueue(Trial[2]);
+
+	//delete joe
+	PQ.dequeue();
+
+	//jose
+	PQ.enqueue(Trial[3]);
+	//jing
+	PQ.enqueue(Trial[4]);
+	//xi
+	PQ.enqueue(Trial[5]);
+	//moe
+	PQ.enqueue(Trial[6]);
+
+	//delete fred
+	PQ.dequeue();
+
+	//miko
+	PQ.enqueue(Trial[7]);
+	//vladdy
+	PQ.enqueue(Trial[8]);
+	//frank
+	PQ.enqueue(Trial[9]);
+	//anny
+	PQ.enqueue(Trial[10]);
+
+	//detelet tuyet
+	PQ.dequeue();
+
+	//xi
+	PQ.enqueue(Trial[11]);
+	//wali
+	PQ.enqueue(Trial[12]);
+	//xChe
+	PQ.enqueue(Trial[13]);
+	//xverra
+	PQ.enqueue(Trial[14]);
+
+	//jose
+	PQ.dequeue();
+	//jing
+	PQ.dequeue();
+	//xi
+	PQ.dequeue();
+	//moe
+	PQ.dequeue();
+	//miko
+	PQ.dequeue();
+	//vlady
+	PQ.dequeue();
+	//frank
+	PQ.dequeue();
+	//anny
+	PQ.dequeue();
+	//xi
+	PQ.dequeue();
+	//xvera
+	PQ.dequeue();
+
+	PQ.dequeue();
+
+}
+
