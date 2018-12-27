@@ -1,0 +1,192 @@
+//
+//  main.cpp
+//  MapsQueueString
+//
+//  Created by Samuel Shaqqur on 11/6/16.
+//  Copyright © 2016 Samuel Shaqqur. All rights reserved.
+//
+
+#include <iostream>
+#define MAX_SIZE 101
+#define max 10
+#include <string>
+using namespace std;
+
+//struture
+struct Node{
+    
+    string name;
+    int id;
+};
+
+class MapClass{
+private:
+    Node MapElements[max];
+    //pairs
+    string value;
+    int key;
+    //pairs
+    int count, find;
+    int end, front;
+public:
+    //constructor function
+    MapClass(){
+        for (int x = 0; x < max; x++) {
+            //pretset every element in array to -1
+            MapElements[x].name = "none";
+            MapElements[x].id = 0;
+        }
+        //value declared as 0
+        value = "none";
+        //set as 0
+        count = 0;
+        
+        end = max -1;
+        front = 0;
+        
+    }
+    
+    void Insert(Node element, int index ) { // filling the tree with data values
+        //if index is greater than max size return
+        
+        
+        //if element[index] = 0 then its empty
+        if (MapElements[count].id == 0) { // adding first parent
+            //intizlizing memembers
+            MapElements[count].name = element.name;
+            MapElements[count].id= element.id;
+            
+            count++;
+        }
+        else{
+            
+            cout << "list is full\n";
+        }
+        
+    }
+    
+    
+    
+    //delete value
+    void DeleteValue(Node MapElements[],int id) {
+        //enter in the number you want to delete
+        int found;
+        
+        for (int x= 0; x<=count; x++) {
+            //if delement is found in the array
+            if (MapElements[x].id  == id) {
+                //reset
+                cout << "deleted: " << MapElements[x].name << "\n";
+                MapElements[x].name = "none";
+                MapElements[x].id = 0;
+                //found index for number
+                found = x;
+                //if found element is last index leave alone
+                if (found==count) {
+                    count--;
+                    return;
+                }
+                swap(MapElements[found],MapElements[count-1]);
+                //then we need to replace that -1 with a number
+                //in last scope so doesnt loop
+                count--;
+                break;
+            }
+            else {
+                
+                cout << "element not found at index: " << x << "\n";
+            }
+        }
+        
+    }
+    
+    
+    
+    //find my pairs insert into the map
+    bool Find(Node element[],int id)
+    {
+        //for loop to search for my pairs
+        for (int x=0; x<max; x++) {
+            //if element.id == id enterd eand found then return true
+            if (element[x].id== id) {
+                cout << "found id= " << id << " " << element[x].name << endl;
+                return true;
+            }
+            //else keep looking
+            else{
+                cout << "Not found at index " << x << endl;
+            }
+            
+        }
+        //case 3: couldnt find it
+        cout << "could not find the id" << endl;
+        return false;
+    }
+    //swap for deleting node
+    void swap(Node &a, Node &b)
+    {
+        Node temp = a;
+        a = b;
+        b = temp;
+        
+    }
+    
+    //returning the amount of elements in the list
+    int returnCount(){
+        //if count is empty then return 0
+        if (count==0) {
+            cout << "There are no elements in the tree!\n";
+        }
+        //otherwise it will return the count
+        return count;
+    }
+    
+    
+    
+    //return size
+    int size(){
+        return count;
+    }
+    
+    //menu for user input
+    void menuPrompt(){
+        int count;
+        
+        Node Test[max];
+        //using for initializing node
+        string name[max] = {"james","mike", "joe","frank","mark", "tom", "marilyn", "julia","jen","larry"};
+        int id[max] = {1,32,64,12,97,120,43,84,54,13};
+        //for loop for intializing nodes memembers
+        for (int x= 0; x<max; x++) {
+            //testing
+            Test[x].name = name[x];
+            Test[x].id = id[x];
+            //insert at a time including counting count
+            Insert(Test[x], count);
+            count++;
+            //print results of pairs
+            cout <<"Inserted- id #:" << MapElements[x].id << " Name: " << MapElements[x].name << endl;
+            
+        }
+        // print size of pairs
+        cout << "Theres " <<  size() << " Pairs\n";
+        //test find methods
+        Find(MapElements, 32);
+        Find(MapElements, 13);
+        //test the deleting method
+        DeleteValue(MapElements,32);
+        DeleteValue(MapElements, 13);
+    }
+    
+};
+
+int main()
+{
+    MapClass Map; // instance or my tree class
+    
+    
+    Map.menuPrompt(); //using object to call my menu class
+    
+    
+    return 0;
+}
