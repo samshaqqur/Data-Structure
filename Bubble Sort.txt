@@ -1,0 +1,62 @@
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+class LISTofIntVars {
+private: int v[10]; //Declaring an array size 10
+  int count; 
+public:
+	LISTofIntVars();
+	void bubbleSort(int *arrayVar, int listNum); //Sorting function
+	void bubbleStartSort();
+};
+
+LISTofIntVars::LISTofIntVars() {
+
+	count = 0;
+} //constructor
+  void LISTofIntVars::bubbleSort(int *arrayVar, int listNum) {
+
+	int arraylist[10] = { 1,2,7,3,9,8,4,6,5,10 };
+
+	cout << "Unsorted Array: ";
+	for (int x = 0; x<listNum; x++) {
+		arrayVar[x] = arraylist[x];
+		cout << arrayVar[x] << " ";
+	}
+	cout << endl;
+	for (int i = 0; i < listNum; i++) {
+		for (int j = 0; j < listNum - 1 - i - 1; ++j) {
+
+			if (arrayVar[j] > arrayVar[j + 1])
+			{
+				int temp = arrayVar[j];
+				arrayVar[j] = arrayVar[j + 1];
+				arrayVar[j + 1] = temp;
+			}
+		}
+	}
+}
+
+void LISTofIntVars::bubbleStartSort() {
+	count = sizeof(v) / sizeof(v[0]);
+	bubbleSort(v, count);
+	cout << "Array Sorted: ";
+	for (int x = 0; x<count; x++) {
+		cout << v[x] << " ";
+	}
+	cout << endl;
+}
+
+int main()
+{
+	cout << "Hello world!" << endl; // Test all access methods…
+
+	LISTofIntVars L1; //declaring an instance of class
+	L1.bubbleStartSort(); //using the class
+
+
+	return 0;
+}
+
+
