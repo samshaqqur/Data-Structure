@@ -1,0 +1,237 @@
+#include "stdafx.h"
+#include <iostream>
+#define MAX_SIZE 100
+using namespace std;
+//structure of data
+struct Node {
+	Node *left;
+	Node *right;
+	int element;
+};
+
+//class using structure for tree
+class TreeNode {
+private:
+	Node *root;
+	int count;
+public:
+
+	//constructor to initalize values
+	TreeNode()
+	{   //preset the count to 0
+		count = 0;
+		//preset the root to 0
+		root = NULL;
+	}
+
+	bool isEmpty()
+	{   
+		if (root == NULL) {
+			return true;
+		}
+		return false;
+	}
+
+	//search for element in tree
+	bool Find(Node* root, int xElement)
+	{
+		if (root == NULL) {
+			return false;
+		}
+		if (root->element == xElement) {
+			return true;
+		}
+		if (root->element >= xElement) {
+			return Find(root->left, xElement);
+		}
+		else {
+			return Find(root->right, xElement);
+		}
+	}
+	Node *Insert(Node* root, int xElement)
+	{
+		if (root == NULL) {
+			root = new Node;
+			root->element = xElement;
+			root->left = root->right = NULL;
+			count++;
+			return root;
+		}
+		if (root->element > xElement)
+		{
+			root->left = Insert(root->left, xElement);
+		}
+		else {
+			root->right = Insert(root->right, xElement);
+		}
+		count++;
+		return root;
+	}
+
+	Node* Delete(Node * root, int element) {
+		if (root == NULL) {
+			cout << "Nothing to delete!\n";
+			return root;
+		}
+		if (element < root->element) {
+			root->left = Delete(root->left, element);
+		}
+		if (element > root->element) {
+			root->left = Delete(root->left, element);
+		}
+		else {
+			if (root->left == NULL && root->right == NULL) {
+				delete root;
+				root = NULL;
+				return root;
+			}
+			if (root->left == NULL) {
+				Node *temp = root;
+				root = root->right;
+				delete temp;
+			}
+			if (root->right == NULL) {
+				Node *temp = root;
+				root = root->left;
+				delete temp;
+			}
+			else {
+				Node *temp = FindLowestVal(root->right);
+				root->element = temp->element;
+				root->right = Delete(root->right, element);
+
+			}
+		}
+		//decrement the count of nodes
+		count--;
+		return root;
+	}
+
+	//lowest value  for left side
+	Node*FindLowestVal(Node*root) {
+		while (root->left != NULL) {
+			//set root = to left child
+			root = root->left;
+		}
+		return root;
+	}
+	//returning the variable counting nodes
+	int returnNumberNode() {
+		if (count == 0) {
+			//if no nodes then says
+			cout << "There are no nodes in the tree\n";
+		}
+		return count;
+	}
+
+
+	//menu choice
+	int menu() {
+		//variable prompt
+		int choice;
+		cout << "Menu\n";
+		cout << "1. Add an item.\n";
+		cout << "2. Remove an item.\n";
+		cout << "3. Print Tree.\n";
+		cout << "4. Number of Nodes.\n";
+		cout << "5. Search number.\n";
+		cout << "6. Exit.\n";
+		cin >> choice;
+		return choice;
+
+	}
+
+	void menuPrompt() {
+
+		//choice prompt, number, delete number
+		int enter, search, deleteNum, choice, order;
+		Node *root = NULL;
+
+		do {
+			//assigning the variable choice to our menu function
+			choice = menu();
+			switch (choice) {
+			case 1: cout << "Please enter a number in: \n";
+				cin >> enter;
+				root = Insert(root, enter);
+				break;
+			case 2:
+				cout << "please integer in a number you like to delete: \n";
+				cin >> deleteNum;
+				root = Delete(root, deleteNum);
+				//prompt the user to delete number
+				break;
+				//showing all the elements if added
+			case 3:
+				cout << "\nPreOrder\n";
+				Preorder(root);
+				cout << "\nInOrder\n";
+				Inorder(root);
+				cout << "\nPostOrder\n";
+				Postorder(root);
+				cout << "\n\n";
+				break;
+			case 4:
+				//prints the number of nodes in the tree.
+				cout << returnNumberNode() << " in the Tree";
+				break;
+			case 5:
+				cout << "Enter in the number you like to search for: \n";
+				cin >> search;
+				//see if prompt number is yours return tree
+				if (Find(root, search) == true) {
+					//true  then element found
+					cout << "Element found!\n";
+				}
+				else {
+					//otherwise not found
+					cout << "not Found!\n";
+				}
+				break;
+			default: cout << "System Exit!\n";
+				break;
+			}
+		} while (choice != 6);
+	}
+
+
+	void Inorder(Node *root) {
+		if (root == NULL) {
+			return;
+		}
+		Inorder(root->left); //go left
+		cout << " " << root->element << ","; // go middle
+		Inorder(root->right);   //go right
+	}
+
+
+	void Preorder(Node *root) {
+		if (root == NULL)
+		{
+			return;
+		}
+		cout << " " << root->element << ","; //print value of root
+		Inorder(root->left);      //go left
+		Inorder(root->right);     ///go right
+	}
+
+	void Postorder(Node *root) {
+		if (root == NULL) return;
+
+		Inorder(root->left);       //go left
+		Inorder(root->right);     //go right
+		cout << " " << root->element << ","; // go middle
+	}
+};
+
+
+int main() {
+
+	TreeNode Tree; // declaring instance of TreeArr type
+	Tree.menuPrompt(); // using the class
+
+	return 0;
+}
+
+
+
