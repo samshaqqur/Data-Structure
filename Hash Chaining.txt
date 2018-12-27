@@ -1,0 +1,299 @@
+//
+//  main.cpp
+//  Week13SamualShaqqurHashChaining
+//
+//  Created by Samuel Shaqqur on 11/13/16.
+//  Copyright © 2016 Samuel Shaqqur. All rights reserved.
+//
+
+#include <iostream>
+#define MAX_SIZE 101
+using namespace std;
+
+//clas item
+class item{
+public:
+        int key; // key
+        int value; // value
+        item * next; // next value
+
+        item(){
+
+                key = 0;
+                value =0;
+                next = NULL;
+            }
+
+};
+
+class Hash{
+private:
+        static const int tableSize = 20;
+        item * HashTable[tableSize];
+
+public:
+
+        Hash(){
+                //intialize all hashtable values
+                for (int x = 0; x< tableSize; x++)
+                    {
+                            HashTable[x] = new item;
+                            HashTable[x]->key = 0;
+                            HashTable[x]->value = 0;
+                            HashTable[x]->next = NULL;
+                        }
+
+            }
+
+        int hash(int key)
+        {
+                //hash value for finding index
+                //index being returned
+                int index;
+
+                //index is depended on hash/Tablesize remainer
+                index = key % tableSize;
+
+                //return the index value
+                return index;
+
+            }
+        //additem into hashtable
+        void AddItem(int Key, int value){
+                //index with respect to key
+                int index = hash(Key);
+
+                if (HashTable[index]->key ==0) {
+
+                        HashTable[index]->key = Key;
+                        HashTable[index]->value = value;
+                    }
+                //so if the index is taken up
+                else{
+                        item *ptr = HashTable[index];
+                        //last item in list
+                        item *n = new item;
+                        n->key = Key;
+                        n->value=value;
+                        n->next = NULL;
+                        while (ptr->next != NULL) {
+
+                                ptr = ptr->next;
+                            }
+                        ptr->next = n;
+
+                    }
+            }
+
+        //number of items in the list
+        int NumberOfItemsInIndex(int index){
+
+                int count = 0;
+                //if hastable empty
+                if (HashTable[index]->key==0)
+                    {
+                            //return count
+                            return count;
+                        }
+                else
+                    {
+                            count++;
+                            item *ptr = HashTable[index];
+
+                            while (ptr->next != NULL)
+                                {
+                                        count++;
+                                        cout << "using Chaining: "<<endl;
+                                        cout << "Social Security Number:\n";
+                                        cout << ptr->next->key;
+                                        cout << "\nTax Percentage per year:\n";
+                                        cout << ptr->next->value;
+                                        cout << "\n";
+                                        ptr = ptr->next;
+
+                                    }
+                        }
+                return count;
+            }
+        //print out table finding number of items
+        void PrintTable()
+        {
+                int number;
+                for (int x=0; x< tableSize; x++)
+                    {
+                            number = NumberOfItemsInIndex(x);
+                            cout << "-----------------------\n";
+                            cout << "index = " << x << endl;
+                            cout << "Social Security Number:\n";
+                            cout << HashTable[x]->key << endl;
+                            cout << "Tax Percentage per year:\n";
+                            cout << HashTable[x]->value << " %" << endl;
+                            cout << "# of items = " << number << "\n";
+                            cout << "-----------------------\n";
+
+                        }
+
+                    }
+
+                    void PrintItemInIndex(int index)
+                    {
+                            item *ptr = HashTable[index];
+
+                            if (ptr->key== 0) {
+                                    cout << "index = " << index << "is Empty" << endl;
+                                }
+                            else
+                                {
+                                        cout << "index = " << index << " Contains the following Items\n";
+
+                                        while (ptr != NULL) {
+                                                cout << "--------------------\n";
+                                                cout << ptr->value << endl;
+                                                cout << ptr->key << endl;
+                                                ptr = ptr->next;
+                                            }
+                                    }
+
+                        }
+                    //made find value function
+                    void FindValue(int key)
+                    {
+                            int index = hash(key);
+
+                            bool foundName = false;
+
+                            int value = 0;
+
+                            item *ptr = HashTable[index];
+                            while (ptr != NULL) {
+                                    if (ptr->key == key)
+                                        {
+                                                foundName = true;
+                                                value = ptr->key;
+                                            }
+                                    ptr = ptr->next;
+                                }
+                            if (foundName == true) {
+                                    cout << "Value = " << value << endl;
+                                }
+                            else
+                                {
+                                        cout << key << "was not found in the hash table\n";
+                                    }
+                        }
+
+                    void RemoveItem(int key)
+                    {
+                            int index = hash(key);
+
+                            item *delPtr;
+                            item *ptr1;
+                            item *ptr2;
+
+                            //case 0 - bucket is empty
+                            if (HashTable[index]->key == 0 && HashTable[index]->value == 0 ) {
+                                    cout << key << " was not found in the hash table\n";
+
+                                }
+                            //case 1 - only 1 item contained in bucket and that item has matching name
+                            else if(HashTable[index]->key == key && HashTable[index]->next == NULL)
+                                {
+                                        HashTable[index]->key = 0;
+                                        HashTable[index]->value = 0;
+                                        cout << key << " ws remove from the hash table\n";
+                                    }
+                            //case 2 - match is located in the first item in the bucket but there eare more items in the bucket
+                            else if(HashTable[index]->key == key)
+                                {
+                                        delPtr = HashTable[index];
+                                        HashTable[index] = HashTable[index]->next;
+                                        delete delPtr;
+                                        cout << key << " was remove from the hash table\n";
+                                    }
+                            //case 3 - bucket contains items but first item isnt a match
+                            else
+                                {
+                                        ptr1 = HashTable[index] -> next;
+                                        ptr2 = HashTable[index];
+
+                                        while (ptr1 != NULL && ptr1->key != key) {
+                                                ptr2 = ptr1;
+                                                ptr1 = ptr1 -> next;
+                                            }
+                                        //case 3.1 - no match
+                                        if (ptr1 == NULL) {
+                                                cout << key << " was not found in the hash table\n";
+                                            }
+                                        //case 3.2 - match is found
+                                        else
+                                            {
+                                                    delPtr = ptr1;
+                                                    ptr1 = ptr1->next;
+                                                    ptr2->next = ptr1;
+                                                    delete delPtr;
+
+                                                    cout << key << " ws remove from the hash table\n";
+
+                                                }
+
+                                    }
+
+
+
+
+
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+                };
+
+
+                int main(){
+                        Hash AmericanPeople;
+                        //inializing social security array
+                        int SocialSecurity[10] = {104264290,529290213,112322462,434502352,124249087,125664289,121489823,124334492,434982049,132359842};
+                        //intiazling tax per year
+                        int TaxPercentagePerYear[10] = {1,5,6,23,4,3,8,53,1,14};
+
+                        //get length to loop
+                        int length = sizeof(TaxPercentagePerYear)/4;
+                        //loop and add every value
+                        for (int x=0; x< length; x++)
+                            {
+                                    //adding american people
+                                    AmericanPeople.AddItem(SocialSecurity[x], TaxPercentagePerYear[x]);
+
+                                }
+                        //printing out the whole hash table
+                        AmericanPeople.PrintTable();
+                        int findKey = 1;
+
+                        while (findKey != 0) {
+
+                                cout << "Remove: ";
+                                cin >> findKey;
+                                
+                                if (findKey!= 0) {
+                                       AmericanPeople.RemoveItem(findKey);
+                                    }
+                            }
+                        
+                        
+                        
+                        return 0;
+                }
+
+
+
+
+
