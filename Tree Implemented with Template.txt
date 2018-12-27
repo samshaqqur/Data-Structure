@@ -1,0 +1,90 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define size 100 // setting size vavriable to 100
+using namespace std;
+
+class TreeArr {
+private:
+	int arr[size]; // declaring and setting the array size to 100
+	int data; // variable that stores the data
+public:
+	TreeArr(int arr[]) {
+		 //fill array with -1
+			for (int i = 1; i < size; i++) {
+				arr[i] = -1;
+		}
+	}
+	void Insert(int arr[], int data, int index) { // filling the tree with data values
+		if (index >= size) {
+			cout << "No Space Available" << endl;
+		}
+		else if (arr[index] == -1) { // adding first parent
+			arr[index] = data;
+		}
+		else if (data < arr[index]) {
+			Insert(arr, data, index * 2); //adding to the left child a value
+		}
+		else {
+			Insert(arr, data, (index * 2) + 1); //adding to the right child a value
+		}
+	}
+
+	int PreOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			return arr[index]; //go first value 
+			InOrder(arr, index * 2); //go left
+			InOrder(arr, (index * 2) + 1); //go right
+		}
+	}
+
+	int InOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			InOrder(arr, index * 2);//go left
+			return arr[index]; // go middle
+			InOrder(arr, (index * 2) + 1);//go right
+		}
+	}
+
+	int PostOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			InOrder(arr, index * 2);//go left
+			InOrder(arr, (index * 2) + 1);//go right
+			return arr[index];// go middle
+		}
+	}
+	void DeleteVal() {
+		int x;
+		cout << "Enter value that you would like to delete: ";
+		cin >> x;
+		for (int i = 1; i < size; i++) {
+			if (arr[i] == x) {
+				arr[i] = -1;
+			}
+		}
+	}
+	void printArr() {
+		cout << "PreOrder: ";
+		cout<<PreOrder(arr, 1);
+		cout << "" << endl;
+		cout << "InOrder: ";
+		cout<< InOrder(arr, 1);
+		cout << "" << endl;
+		cout << "PostOrder: ";
+		cout << PostOrder(arr, 1);
+		cout << "" << endl;
+	}
+};
+
+int main()
+{
+	int TreeArray[100];
+	TreeArr MyTree(TreeArray); // declaring instance of TreeArr type
+	MyTree.Insert(TreeArray, 5, 1);	// using the class
+	MyTree.Insert(TreeArray, 21, 1);
+	MyTree.Insert(TreeArray, 254, 1);
+	MyTree.printArr();
+	return 0;
+}
+
+
