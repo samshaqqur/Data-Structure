@@ -1,0 +1,116 @@
+#include "stdafx.h"
+#include <iostream> 
+using namespace std;
+
+class LISTofIntVars {
+
+private:
+	int v1, v2, v3, v4, v5, v6, v7, v8, v9, v10;//Decalre an array with size 10
+	int *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6, *ptr7, *ptr8, *ptr9, *ptr10;//Decalre pointers
+	int count; // declare a count int
+public:
+	LISTofIntVars()
+	{
+		v1 = v2 = v3 = v4 = v5 = v6 = v7 = v8 = v9 = v10 = -1;
+		ptr1 = &v1; ptr2 = &v2; ptr3 = &v3; ptr4 = &v4; ptr5 = &v5; ptr6 = &v6; ptr7 = &v7; ptr8 = &v8; ptr9 = &v9; ptr10 = &v10;
+		count = 0;
+	}//constructor  
+
+
+	bool isFull() { // checks if array is full
+		if (count == 10) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	// called individually and also by the add method 
+
+	bool add1(int inVar) { // adds into the pointers values
+		if (!isFull()) {
+			count++;  // add 1 count             
+			if (v1 == -1) { v1 = inVar; }
+			else if (v2 == -1) { v2 = inVar; return true; }
+			else if (v3 == -1) { v3 = inVar; return true; }
+			else if (v4 == -1) { v4 = inVar; return true; }
+			else if (v5 == -1) { v5 = inVar; return true; }
+			else if (v6 == -1) { v6 = inVar; return true; }
+			else if (v7 == -1) { v7 = inVar; return true; }
+			else if (v8 == -1) { v8 = inVar; return true; }
+			else if (v9 == -1) { v9 = inVar; return true; }
+			else if (v10 == -1) { v10 = inVar; return true; }
+			else return false;
+		}
+	}
+
+
+	bool isEmpty() { // checks if empty
+		if (count == 0) { return true; }
+		else {
+			return false;
+		}
+	}	// called individually and also by the add method     
+
+	bool found(int inVal) {	 // called individually and also by the delete method   
+		if (!isEmpty()) {
+			if (*ptr1 == inVal) { return true; }
+			else if (*ptr2 == inVal) { return true; }
+			else if (*ptr3 == inVal) { return true; }
+			else if (*ptr4 == inVal) { return true; }
+			else if (*ptr5 == inVal) { return true; }
+			else if (*ptr6 == inVal) { return true; }
+			else if (*ptr7 == inVal) { return true; }
+			else if (*ptr8 == inVal) { return true; }
+			else if (*ptr9 == inVal) { return true; }
+			else if (*ptr10 == inVal) { return true; }
+			else {
+				return false;
+			}
+		}
+	}
+
+	bool delete1(int inVal) { // deletes the value in the pointer
+		if (*ptr1 == inVal) { *ptr1 = -1; return true; }
+		else if (*ptr2 == inVal) { *ptr2 = -1; return true; }
+		else if (*ptr3 == inVal) { *ptr3 = -1; return true; }
+		else if (*ptr4 == inVal) { *ptr4 = -1; return true; }
+		else if (*ptr5 == inVal) { *ptr5 = -1; return true; }
+		else if (*ptr6 == inVal) { *ptr6 = -1; return true; }
+		else if (*ptr7 == inVal) { *ptr7 = -1; return true; }
+		else if (*ptr8 == inVal) { *ptr8 = -1; return true; }
+		else if (*ptr9 == inVal) { *ptr9 = -1; return true; }
+		else if (*ptr10 == inVal) { *ptr10 = -1; return true; }
+		else { return false; }
+	}
+
+	void listAll() { // prints the values in the pointer
+		if (*ptr1 != -1) { cout << *ptr1 << endl; }
+		if (*ptr2 != -1) { cout << *ptr2 << endl; }
+		if (*ptr3 != -1) { cout << *ptr3 << endl; }
+		if (*ptr4 != -1) { cout << *ptr4 << endl; }
+		if (*ptr5 != -1) { cout << *ptr5 << endl; }
+		if (*ptr6 != -1) { cout << *ptr6 << endl; }
+		if (*ptr7 != -1) { cout << *ptr7 << endl; }
+		if (*ptr8 != -1) { cout << *ptr8 << endl; }
+		if (*ptr9 != -1) { cout << *ptr9 << endl; }
+		if (*ptr10 != -1) { cout << *ptr10 << endl; }
+	}  // others 
+};
+
+int main() {
+	cout << "Hello world!" << endl; // Test all access methods…      
+	LISTofIntVars L1;// decalre an instance of the class
+	L1.add1(42);// adding value
+	L1.add1(17);// adding value
+	L1.listAll();//prints all valuesin pointers
+	L1.delete1(17);// deleting value
+	L1.listAll();
+	if (L1.found(17)) { cout << "17 found" << endl; }
+	else { cout << "17 not found" << endl; }
+	if (L1.found(42)) { cout << "42 found" << endl; }
+	else { cout << "14 not found" << endl; }
+	//L1.makeEmpty(); //makeEmpty function is Not yet coded      
+	L1.listAll(); // prints all valuesin pointers
+	return 0;
+}
