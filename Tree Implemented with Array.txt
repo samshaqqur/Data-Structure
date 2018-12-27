@@ -1,0 +1,95 @@
+#include "stdafx.h"
+#include <iostream>
+#define size 100 // setting size vavriable to 100
+using namespace std;
+
+class TreeArr {
+private:
+	int arr[size]; // declaring and setting the array size to 100
+	int data; // variable that stores the data
+public:
+	void Show() {
+		fillArr(); // filling array cells with -1
+		char ch = 'y';
+		while (ch != 'n' && ch != 'N') { 
+			cout << "Please enter a Value" << endl;
+			cin >> data; // prompt value
+			CreateT(arr, data, 1); // create the tree
+			cout << "Would you like to continue? y/n" << endl;
+			cin >> ch;
+		}
+		printArr();// prints value in pre in post order
+	}
+	void fillArr() { //fill array with -1
+		for (int i = 1; i < size; i++) {
+			arr[i] = -1;
+		}
+	}
+	void CreateT(int arr[],int data, int index) { // filling the tree with data values
+		if (index >= size) {
+			cout << "No Space Available" << endl;
+		}
+		else if (arr[index] == -1) { // adding first parent
+			arr[index] = data;
+		}
+		else if (data < arr[index]) {
+			CreateT(arr, data, index * 2); //adding to the left child a value
+		}
+		else {
+			CreateT(arr, data, (index * 2)+1); //adding to the right child a value
+		}
+	}
+
+	void PreOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			cout << " " << arr[index]; //go first value 
+			PreOrder(arr, index * 2); //go left
+			PreOrder(arr, (index * 2) + 1); //go right
+		}
+	}
+
+	void InOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			InOrder(arr, index * 2);//go left
+			cout << " " << arr[index] ; // go middle
+			InOrder(arr, (index * 2)+1);//go right
+		}
+	}
+
+	void PostOrder(int arr[], int index) {
+		if (arr[index] != -1) {
+			PostOrder(arr, index * 2);//go left
+			PostOrder(arr, (index * 2) + 1);//go right
+			cout << " " << arr[index];// go middle
+		}
+	}
+	void DeleteVal() {
+		int x;
+		cout << "Enter value that you would like to delete: ";
+		cin >> x;
+		for (int i = 1; i < size; i++) {
+			if (arr[i] == x) {
+				arr[i] = -1;
+			}
+		}
+	}
+	void printArr() {
+		cout << "PreOrder: ";
+		PreOrder(arr, 1);
+		cout << "" << endl;
+		cout << "InOrder: ";
+		InOrder(arr, 1);
+		cout << "" << endl;
+		cout << "PostOrder: ";
+		PostOrder(arr, 1);
+		cout << "" << endl;
+	}
+};
+
+int main()
+{
+	TreeArr MyTree; // declaring instance of TreeArr type
+	MyTree.Show();	// using the class
+    return 0;
+}
+
