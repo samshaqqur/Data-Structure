@@ -1,0 +1,132 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+class queue {
+private:
+	int count = 0;
+	int ArrSize = 12;
+	//string element size of 12
+	string element[12];
+	//keeping track of front, back and size of array with integer
+	int front, rear, sizearray;
+public:
+	queue()
+
+	{
+		rear = front = -1; // keep track of front so we know any number = -1 is front
+		sizearray = sizeof((rear + 1) % ArrSize);
+	}
+	void enqueue(string xElement)
+	{
+		// check if full
+		if ((rear + 1) % ArrSize == front) {
+			return;
+		}
+		if (isEmpty()) {
+			//set front and rear to one array one
+			front = rear = 0;
+		}
+		else {
+			rear = (rear + 1) % ArrSize;
+		}
+
+		element[rear] = xElement;
+		cout << "element added to the queue: " << element[rear] << "\n";
+		count++;
+	}
+
+
+
+	void dequeue()
+	{
+		// if head = -1 then add one to head and add inserted elemnt
+		if (isEmpty()) {
+			return;
+		}
+		//if front equal back
+		if (front == rear) {
+			rear = front = -1;
+		}
+		else {
+			front = (front + 1) % ArrSize;
+		}
+
+		count--;
+
+	}
+	bool isFull()
+	{
+		if (rear == ArrSize - 1) {
+			return true;
+		}
+		return false;
+	}
+
+	bool isEmpty()
+	{
+		if (front == -1 && rear == -1) {
+			return true;
+
+		}
+		else {
+			return false;
+		}
+
+	}
+	//return the size of elements in the array array
+	int size()
+	{
+		return count;
+
+	}
+	string GetFront()
+	{
+		//return the front element of array
+		return element[front];
+	}
+	string end()
+	{
+		//return the back element of array
+		return element[rear];
+	}
+
+};
+
+
+int main()
+{
+
+	queue myQ;   //( Use default constructor to initialize front and end to zero. )
+	cout << "Queue size is: " << myQ.size() << endl;  // number of elements in queue
+	myQ.dequeue();   //  Try to deqeue when the queue is empty. Should catch UNDERFLOW
+	myQ.enqueue("Fred");
+	myQ.enqueue("Liv");
+	myQ.enqueue("Julie");
+	myQ.enqueue("Rich");
+	myQ.enqueue("William");
+	myQ.enqueue("Olo");
+	myQ.enqueue("Xi");
+	myQ.enqueue("Chu");
+	myQ.enqueue("Annie");
+	myQ.enqueue("Carlos");
+	myQ.enqueue("Tuyet");
+	myQ.enqueue("Sue");
+	//myQ.enqueue("Penny");  // Add 1 to many, should catch OVERFLOW
+	cout << "Front Value is: " << myQ.GetFront() << endl;  // index value
+	cout << "Back Value is: " << myQ.end() << endl;   // index value
+	cout << "Queue size is: " << myQ.size() << endl;   // number of elements in queue
+	myQ.dequeue();
+	myQ.dequeue();
+	myQ.dequeue();
+	myQ.enqueue("Olive");
+	myQ.enqueue("Jim");
+	myQ.dequeue();
+	myQ.dequeue();
+	cout << "Front Value is: " << myQ.GetFront() << endl;  // index values
+	cout << "Back Value is: " << myQ.end() << endl;   // index value
+	cout << "Queue size is: " << myQ.size() << endl;   // number of elements in queue
+
+	return 0;
+}
+
