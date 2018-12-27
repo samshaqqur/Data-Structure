@@ -1,0 +1,147 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+class Node {        // Linked Queue
+public:
+	Node* ptrNext;
+	Node* ptrPrevious;
+	string data;
+};
+
+
+class queue {
+private:
+	int count;
+public:
+	queue();        // Constructor
+	Node* ptrFront = NULL;
+	Node* ptrEnd = NULL;
+	int size();
+	void enqueue(string inData);
+	void dequeue();
+	bool isEmpty();
+	string front();
+	string end();
+	void printAll();
+};
+
+queue::queue() {
+	ptrFront = NULL;
+	ptrEnd = NULL;
+	count = 0;
+}
+
+int queue::size() {
+	return count;
+}
+
+bool queue::isEmpty() {
+	if (count == 0) {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+string queue::front() {
+	return ptrFront->data;
+}
+
+string queue::end() {
+	return ptrEnd->data;
+}
+
+void queue::enqueue(string inData) {
+	if (ptrFront == NULL && ptrEnd == NULL) {       // add the first element
+		ptrEnd = new Node;
+		ptrEnd->data = inData;
+		ptrEnd->ptrNext = NULL;
+		ptrEnd->ptrPrevious = NULL;
+		ptrFront = ptrEnd;
+	}
+
+
+	else
+	{
+		Node* ptrHolder = ptrEnd;
+
+		ptrEnd = new Node;
+		ptrEnd->data = inData;
+		ptrHolder->ptrNext = ptrEnd;
+		ptrEnd->ptrNext = NULL;
+		ptrEnd->ptrPrevious = ptrHolder;
+
+	}
+	count++;
+}
+
+void queue::dequeue() {
+	if (isEmpty())
+	{
+		cout << "Queue is Empty... Cannot delete!" << endl;
+	}
+
+	else
+	{
+		ptrFront = ptrFront->ptrNext;
+		ptrFront->ptrPrevious = NULL;
+		count--;
+	}
+}
+
+
+
+void queue::printAll() {
+	Node* ptrCurrent = ptrFront;  // start at the beginning
+	while (ptrCurrent != NULL) {
+		cout << ptrCurrent->data << endl;
+		ptrCurrent = ptrCurrent->ptrNext; // advacne to next node
+	}
+}
+
+
+
+
+int main() {
+
+	queue myQ;   //( Use default constructor to initialize front and end to NULL. )
+	cout << myQ.size() << endl;  // number of elements in queue
+	myQ.dequeue();   //  Try to deqeue when the queue is empty. Should catch UNDERFLOW
+	myQ.enqueue("Fred");
+	myQ.enqueue("Liv");
+	myQ.enqueue("Julie");
+	myQ.enqueue("Rich");
+	myQ.enqueue("William");
+	myQ.enqueue("Olo");
+	myQ.enqueue("Xi");
+	myQ.enqueue("Chu");
+	myQ.enqueue("Annie");
+	myQ.enqueue("Carlos");
+	myQ.enqueue("Tuyet");
+	myQ.enqueue("Sue");
+	cout << myQ.front() << endl;  // name at front, if not empty
+	cout << myQ.end() << endl;   // name at end, if not empty
+	cout << myQ.size() << endl;   // number of elements in queue
+	myQ.dequeue();
+	myQ.dequeue();
+	myQ.dequeue();
+	myQ.enqueue("Olive");
+	myQ.enqueue("Jim");
+	myQ.dequeue();
+	myQ.dequeue();
+	cout << myQ.front() << endl;  // name at front, if not empty
+	cout << myQ.end() << endl;   // name at end, if not empty
+	cout << myQ.size() << endl;   // number of elements in queue
+	myQ.printAll();
+
+	return 0;
+}
+
+
+
+
