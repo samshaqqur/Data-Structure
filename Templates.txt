@@ -1,0 +1,24 @@
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+template<class T>
+
+
+int squareNum(T inX) {
+	T answer = 0;
+	answer = inX*inX;
+	return answer;
+}
+
+
+int main()
+{
+	cout << squareNum(12) << endl;
+	cout << squareNum(12.69) << endl;
+    return
+}
+
+
+
+
