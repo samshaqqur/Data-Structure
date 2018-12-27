@@ -1,0 +1,47 @@
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <queue> // including queue STL 
+using namespace std;
+
+
+int main()
+{
+	queue<string> myQ;   //( Use default constructor to initialize front and end to zero. )
+	cout << "Queue size is: " << myQ.size() << endl;  // number of elements in queue
+	//myQ.dequeue();   //  Try to deqeue when the queue is empty. Should catch UNDERFLOW
+	myQ.push("Fred");
+	myQ.push("Liv");
+	myQ.push("Julie");
+	myQ.push("Rich");
+	myQ.push("William");
+	myQ.push("Olo");
+	myQ.push("Xi");
+	myQ.push("Chu");
+	myQ.push("Annie");
+	myQ.push("Carlos");
+	myQ.push("Tuyet");
+	myQ.push("Sue");
+	//myQ.enqueue("Penny");  // Add 1 to many, should catch OVERFLOW
+	cout << "Front Value is: " << myQ.front() << endl;  // index value
+	cout << "Back Value is: " << myQ.back() << endl;   // index value
+	cout << "Queue size is: " << myQ.size() << endl;   // number of elements in queue
+	myQ.pop();
+	myQ.pop();
+	myQ.pop();
+	myQ.push("Olive");
+	myQ.push("Jim");
+	myQ.pop();
+	myQ.pop();
+	cout << "Front Value is: " << myQ.front() << endl;  // index values
+	cout << "Back Value is: " << myQ.back() << endl;   // index value
+	cout << "Queue size is: " << myQ.size() << endl;   // number of elements in queue
+	
+    return 0;
+}
+
+
+
+
+
+
