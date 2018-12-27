@@ -1,0 +1,119 @@
+#include "stdafx.h"
+#include <iostream>
+#include <stack> 
+#include <string>
+using namespace std;
+
+class Node{
+public:
+	Node *Next;//top node
+	string element;
+};
+//stack class functions
+class STACK {
+private:
+	Node *Head; // head of list
+	int count;
+public:
+	STACK() {
+		Head = NULL;
+		count = 0;
+	}
+	//insert item
+	void push(string xElement)
+	{
+		Node *newHead = new Node;
+		//if no items in the stack
+		if (Head == NULL) {
+			//setting temp node to equal to the parm
+			newHead->element = xElement;
+			//using ptrtemp to set linked equal to NULL
+			newHead->Next = NULL;
+			//setting the NULL node equal to the temp
+			Head = newHead;
+			//telling my list that have another element
+			count++;
+		}
+		//if there is items in the stack
+		else {
+			newHead->element = xElement;
+			newHead->Next = Head;
+			Head = newHead;
+			count++;
+		}
+	}
+	//take out an item from the top
+	void pop() {
+		//if there is nothing ther
+		if (Head == NULL) {
+			cout << "nothing to pop out of the stack!" << endl;
+		}
+		//if something is in the head
+		else {
+			//set new node to our current
+			Node *Last = Head;
+			//set head to head pointing to the next node which is NULL
+			Head = Head->Next;
+			//deleted node
+			count--;
+			delete Head;
+		}
+	}
+	//show list
+	void ShowStack()
+	{
+		Node *Temp = Head;
+		while (Temp != NULL) {
+			cout << Temp->element << ", ";
+			Temp = Temp->Next;
+		}
+	}
+	//menu for prompt
+	int menu()
+	{
+		int choice;
+		cout << " " << endl;
+		cout << "Please Choose one" << endl;
+		cout << "1. Push item" << endl;
+		cout << "2. Pop item"<< endl;
+		cout << "3. Print the Stack Items" << endl;
+		cout << "4. Exit. "<< endl;
+		cin >> choice;
+		return choice;
+	}
+	void implmentation() {
+		int choice;
+		string input;
+		do {
+			//assigning the variable choice to our menu function
+			choice = menu();
+			switch (choice) {
+				//first option which you can
+			case 1: cout << "Enter in a string you like to push:";
+				cout << " " << endl;
+				cin >> input;
+				push(input);
+				//prompt for number being added to stack
+				break;
+			case 2: // poping first item
+				pop();
+				break;
+				//showing all the elements if added
+			case 3:
+				ShowStack();
+				break;
+			default: cout << "System Exit!" << endl;
+				break;
+			}
+			//goes until choice is not == to 4
+		} while (choice != 4);
+	}
+};
+//driver function
+int main()
+{
+	STACK S1;
+	S1.implmentation();
+	return 0;
+}
+
