@@ -1,62 +1,60 @@
-#include "stdafx.h"
 #include <iostream>
 using namespace std;
 
-class LISTofIntVars {
-private: int v[10]; //Declaring an array size 10
-  int count; 
+class BubbleSort {
 public:
-	LISTofIntVars();
-	void bubbleSort(int *arrayVar, int listNum); //Sorting function
-	void bubbleStartSort();
+    void bubbleSorted(int arr[], int size);
+    void bubbleData();
+    void display();
+    int arr[50];
+    int array_size;
+    int temp;
+
 };
 
-LISTofIntVars::LISTofIntVars() {
-
-	count = 0;
-} //constructor
-  void LISTofIntVars::bubbleSort(int *arrayVar, int listNum) {
-
-	int arraylist[10] = { 1,2,7,3,9,8,4,6,5,10 };
-
-	cout << "Unsorted Array: ";
-	for (int x = 0; x<listNum; x++) {
-		arrayVar[x] = arraylist[x];
-		cout << arrayVar[x] << " ";
-	}
-	cout << endl;
-	for (int i = 0; i < listNum; i++) {
-		for (int j = 0; j < listNum - 1 - i - 1; ++j) {
-
-			if (arrayVar[j] > arrayVar[j + 1])
-			{
-				int temp = arrayVar[j];
-				arrayVar[j] = arrayVar[j + 1];
-				arrayVar[j + 1] = temp;
-			}
-		}
-	}
-}
-
-void LISTofIntVars::bubbleStartSort() {
-	count = sizeof(v) / sizeof(v[0]);
-	bubbleSort(v, count);
-	cout << "Array Sorted: ";
-	for (int x = 0; x<count; x++) {
-		cout << v[x] << " ";
-	}
-	cout << endl;
-}
-
-int main()
+void BubbleSort::bubbleData() 
 {
-	cout << "Hello world!" << endl; // Test all access methods…
-
-	LISTofIntVars L1; //declaring an instance of class
-	L1.bubbleStartSort(); //using the class
-
-
-	return 0;
+    cout<<"Enter size of list:" << endl;
+    cin>>array_size;
+    cout<<"Enter elements" << endl;
+    cout << endl;
+    for(int i = 0; i <= array_size -1; i++) 
+	{
+        cin>>arr[i];
+    }
+     cout << "Elements of your unsorted list: ";
+    for(int j = 0; j <= array_size -1; j++)
+	{
+        cout << arr[j] << " " ;
+    }
+    cout<<" "<<endl;
+        display();
 }
 
 
+
+void BubbleSort::bubbleSorted(int arr[], int array_size)
+ {
+    for (int k = 0; k < array_size; k++)
+        for (int m = 0; m < array_size -k -1; m++)
+            if (arr[m] > arr[m +1]){
+                temp = arr[m];
+                arr[m] = arr[m + 1];
+                arr[m + 1] = temp;
+      }
+}
+
+void BubbleSort::display() {
+
+    bubbleSorted(arr,array_size);
+        cout << "Elements of your sorted list:  ";
+        for(int x = 0; x < array_size; x++) {
+            cout << arr[x] << " ";
+        }
+}
+
+int main () {
+    BubbleSort s1;
+    s1.bubbleData();
+    return 0;
+}
